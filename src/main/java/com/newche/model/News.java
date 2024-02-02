@@ -42,8 +42,9 @@ public class News {
 	}
 	public void setId(String id) {
 		this.id = id;
+		logger.debug("ID set to: {}", id);
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}

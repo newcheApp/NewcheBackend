@@ -1,6 +1,9 @@
 package com.newche.model;
 
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -23,7 +26,7 @@ public class User {
     @DBRef
     private List<Tag> tagIds;
 	
-	
+	private static final Logger logger = LoggerFactory.getLogger(News.class);
 	
 	public User() {
 		// TODO Auto-generated constructor stub
@@ -46,6 +49,7 @@ public class User {
 	}
 	public void setId(String id) {
 		this.id = id;
+		logger.debug("ID set to: {}", id);
 	}
 	
 	

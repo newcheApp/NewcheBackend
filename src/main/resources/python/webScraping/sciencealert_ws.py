@@ -3,9 +3,6 @@ from bs4 import BeautifulSoup
 from pymongo import MongoClient
 import time
 
-print("\n------------------------------------------------------")
-print("---------- Extracting News in Science Alert ----------\n")
-
 # URL of ScienceAlert
 url = "https://www.sciencealert.com/"
 
@@ -62,22 +59,12 @@ def fetch_articles(url):
         article_text = article_section.get_text(separator=' ', strip=True) if article_section else "No content found"
 
         news = {"title": title, "url": url, "date": date, "content": article_text}
-        print(f"Title: {title}")
-        print(f"Date: {date}")
-        print(f"Content: {article_text[:100]}...\n")
+        print(f"Article fetched successfully: {title}")
         return news
 
     except requests.RequestException as e:
         print(f"Error fetching the page: {e}")
         return {"title": "Error", "url": "Error", "date": "Error", "content": "Error"}
-
-article_html_array = extract_articles(url)
-article_urls = extract_article_urls(article_html_array)
-news_array = []
-
-for url in article_urls:
-    news_article = fetch_articles(url)
-    news_array.append(news_article)
 
 # Connection URI of MongoDB
 uri = "mongodb://egemenNewcheAdmin:passNewche@localhost:27017/newcheDB"
@@ -87,6 +74,26 @@ client = MongoClient(uri)
 db = client['newcheDB']
 # Select the collection
 collection = db['unprocessedNews']
+
+
+article_html_array = extract_articles(url)
+all_article_urls = extract_article_urls(article_html_array)
+print("\n")
+
+article_urls = []
+
+for url in all_article_urls:
+    if not collection.find_one({"url": url}):
+        article_urls.append(url)
+        print("New url will be added: "+ url)
+    else:
+        print(f"URL already in database, skipping: {url}")
+
+news_array = []
+
+for url in article_urls:
+    news_article = fetch_articles(url)
+    news_array.append(news_article)
 
 print("Adding articles to MongoDB...")
 
