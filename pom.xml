@@ -71,6 +71,20 @@
 							<argument>src\main\resources\python\webScraping\spacenews_ws.py</argument>
 						</arguments>
 					</configuration>
+					<execution>
+					<?m2e execute onConfiguration?>
+					<id>Motorsport_WB</id>
+					<phase>test</phase>
+					<goals>
+						<goal>exec</goal>
+					</goals>
+					<configuration>
+						<executable>python</executable>
+						<arguments>
+							<argument>src\main\resources\python\webScraping\motorsport_ws.py</argument>
+						</arguments>
+					</configuration>
+				</execution>
 				</execution>
             </executions>
         </plugin>
