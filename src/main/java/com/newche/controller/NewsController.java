@@ -3,7 +3,12 @@ package com.newche.controller;
 import com.newche.model.News;
 import com.newche.model.Tag;
 import com.newche.service.NewsService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +19,10 @@ import java.util.List;
 @RequestMapping("/api/news") // Base path for all news-related endpoints
 public class NewsController {
 
+    private static final Logger log = LoggerFactory.getLogger(NewsController.class);
     private final NewsService newsService;
 
+    
     @Autowired
     public NewsController(NewsService newsService) {
         this.newsService = newsService;
@@ -40,9 +47,8 @@ public class NewsController {
     public ResponseEntity<List<News>> getNewsByTags(@RequestParam List<String> tagIds) {
         List<News> newsList = newsService.getNewsByTags(tagIds);
         return ResponseEntity.ok(newsList);
-    }
+    }    
 
-    
     // Get all news items
     @GetMapping
     public ResponseEntity<List<News>> getAllNews() {
@@ -50,13 +56,15 @@ public class NewsController {
         return ResponseEntity.ok(newsList);
     }
     
-    
-    // Retrieve news by date
+    // Retrieve news by date@GetMapping("/by-date")
     @GetMapping("/by-date")
-    public ResponseEntity<List<News>> getNewsByDate(@RequestParam Date date) {
+    public ResponseEntity<List<News>> getNewsByDate(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+        log.info("Received date: {}", date);
         List<News> newsList = newsService.getNewsByDate(date);
+        log.info("Query returned {} results", newsList.size());
         return ResponseEntity.ok(newsList);
     }
+
     public ResponseEntity<List<News>> getAllTags() {
         List<News> newsList = newsService.getAllNews();
         return ResponseEntity.ok(newsList);
