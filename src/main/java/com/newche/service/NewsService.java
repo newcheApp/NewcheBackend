@@ -49,5 +49,9 @@ public class NewsService {
         return newsDAO.findAllNews();
     }
 
+    public List<News> getNewsByTagsAndDate(List<String> tagIds, Date date) {
+        return newsDAO.findNewsByTagsAndDate(tagIds, date);
+    }
+
     // Additional methods as required...
 }

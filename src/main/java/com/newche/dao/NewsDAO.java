@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -89,24 +90,62 @@ public class NewsDAO {
 
     // Find news by date
     public List<News> findNewsByDate(Date date) {
-        try {
-            logger.info("Finding news by date");
-            Query query = new Query();
-            query.addCriteria(Criteria.where("publishDate").is(date));
-            return mongoTemplate.find(query, News.class);
-        } catch (DataAccessException e) {
-            logger.error("Error occurred while finding news by date: {}", e.getMessage());
-            return Collections.emptyList();
-        }
+    try {
+        // Reset the time part of the date to get the start of the day
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        Date startDate = calendar.getTime(); // Start of the day
+        
+        // Move the calendar to the end of the day
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        Date endDate = calendar.getTime(); // Start of the next day
+
+        logger.info("Finding news from {} to {}", startDate, endDate);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("date").gte(startDate).lt(endDate));
+
+        return mongoTemplate.find(query, News.class);
+    } catch (DataAccessException e) {
+        logger.error("Error occurred while finding news by date: {}", e.getMessage());
+        return Collections.emptyList();
     }
+}
 
     // Find news by tags and date
-    public List<News> findNewsByTagsAndDate(List<Tag> tags, Date date) {
+    public List<News> findNewsByTagsAndDate(List<String> tagIds, Date date) {
         try {
-            logger.info("Finding news by tags and date");
+            logger.info("Finding news by tags: {} and date: {}", tagIds, date);
+
+            // Set up the date range to cover the entire day
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            Date startDate = calendar.getTime(); // start of the day
+            calendar.add(Calendar.DATE, 1);
+            Date endDate = calendar.getTime(); // start of the next day
+
+            logger.info("Querying for news items from {} to {}", startDate, endDate);
+
+            // Build the query to filter by tags and the date range
             Query query = new Query();
-            query.addCriteria(Criteria.where("tags.$id").in(tags).and("publishDate").is(date));
-            return mongoTemplate.find(query, News.class);
+            query.addCriteria(Criteria.where("tags").in(tagIds)
+                                      .andOperator(
+                                          Criteria.where("publishDate").gte(startDate).lt(endDate)
+                                      ));
+
+            List<News> results = mongoTemplate.find(query, News.class);
+            logger.info("Query returned {} news items", results.size());
+
+            return results;
         } catch (DataAccessException e) {
             logger.error("Error occurred while finding news by tags and date: {}", e.getMessage());
             return Collections.emptyList();

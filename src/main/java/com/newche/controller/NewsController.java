@@ -65,6 +65,17 @@ public class NewsController {
         return ResponseEntity.ok(newsList);
     }
 
+    @GetMapping("/by-tags-date")
+    public ResponseEntity<List<News>> getNewsByTagsAndDate(
+        @RequestParam List<String> tags,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
+        List<News> newsItems = newsService.getNewsByTagsAndDate(tags, date);
+        if (newsItems.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(newsItems);
+    }
+
     public ResponseEntity<List<News>> getAllTags() {
         List<News> newsList = newsService.getAllNews();
         return ResponseEntity.ok(newsList);
