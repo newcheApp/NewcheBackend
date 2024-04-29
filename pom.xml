@@ -17,6 +17,12 @@
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
@@ -44,48 +50,6 @@
             <artifactId>exec-maven-plugin</artifactId>
             <version>3.0.0</version>
             <executions>
-                <execution>
-                	<?m2e execute onConfiguration?>
-					<id>rscienceAlert_WB</id>
-					<phase>compile</phase>
-					<goals>
-						<goal>exec</goal>
-					</goals>
-					<configuration>
-						<executable>python</executable>
-						<arguments>
-							<argument>src\main\resources\python\webScraping\sciencealert_ws.py</argument>
-						</arguments>
-					</configuration>
-				</execution>
-				<execution>
-					<?m2e execute onConfiguration?>
-					<id>spaceNews_WB</id>
-					<phase>test</phase>
-					<goals>
-						<goal>exec</goal>
-					</goals>
-					<configuration>
-						<executable>python</executable>
-						<arguments>
-							<argument>src\main\resources\python\webScraping\spacenews_ws.py</argument>
-						</arguments>
-					</configuration>
-					<execution>
-					<?m2e execute onConfiguration?>
-					<id>Motorsport_WB</id>
-					<phase>test</phase>
-					<goals>
-						<goal>exec</goal>
-					</goals>
-					<configuration>
-						<executable>python</executable>
-						<arguments>
-							<argument>src\main\resources\python\webScraping\motorsport_ws.py</argument>
-						</arguments>
-					</configuration>
-				</execution>
-				</execution>
             </executions>
         </plugin>
 		</plugins>

@@ -40,6 +40,28 @@ public class NewsDAO {
         }
     }
 
+    // Delete a news item
+    public void deleteNews(String id) {
+        try {
+            logger.info("Deleting news with ID: {}", id);
+            Query query = new Query(Criteria.where("id").is(id));
+            mongoTemplate.remove(query, News.class);
+        } catch (DataAccessException e) {
+            logger.error("Error occurred while deleting news: {}", e.getMessage());
+        }
+    }
+
+    // Get all news
+	public List<News> findAllNews() {
+		try {
+            logger.info("Listing all news items");
+            return mongoTemplate.findAll(News.class);
+        } catch (DataAccessException e) {
+            logger.error("Error occurred while listing all news items: {}", e.getMessage());
+            return Collections.emptyList();
+        }
+	}
+
     // Find news by ID
     public News findNewsById(String id) {
         try {
@@ -48,6 +70,33 @@ public class NewsDAO {
         } catch (DataAccessException e) {
             logger.error("Error occurred while finding news by ID: {}", e.getMessage());
             return null;
+        }
+    }
+
+    // Find news by tags
+    public List<News> findNewsByTags(List<String> tagIds) {
+        try {
+            logger.info("Finding news by tags");
+            Query query = new Query();
+            query.addCriteria(Criteria.where("tags").in(tagIds));  // Adjusted to match an array of strings
+            return mongoTemplate.find(query, News.class);
+        } catch (DataAccessException e) {
+            logger.error("Error occurred while finding news by tags: {}", e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+    
+
+    // Find news by date
+    public List<News> findNewsByDate(Date date) {
+        try {
+            logger.info("Finding news by date");
+            Query query = new Query();
+            query.addCriteria(Criteria.where("publishDate").is(date));
+            return mongoTemplate.find(query, News.class);
+        } catch (DataAccessException e) {
+            logger.error("Error occurred while finding news by date: {}", e.getMessage());
+            return Collections.emptyList();
         }
     }
 
@@ -64,55 +113,6 @@ public class NewsDAO {
         }
     }
 
-    // Delete a news item
-    public void deleteNews(String id) {
-        try {
-            logger.info("Deleting news with ID: {}", id);
-            Query query = new Query(Criteria.where("id").is(id));
-            mongoTemplate.remove(query, News.class);
-        } catch (DataAccessException e) {
-            logger.error("Error occurred while deleting news: {}", e.getMessage());
-        }
-    }
-
-    // Find news by tags
-    public List<News> findNewsByTags(List<String> tagIds) {
-        try {
-            logger.info("Finding news by tags");
-            Query query = new Query();
-            query.addCriteria(Criteria.where("tags.$id").in(tagIds));
-            return mongoTemplate.find(query, News.class);
-        } catch (DataAccessException e) {
-            logger.error("Error occurred while finding news by tags: {}", e.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
-    // Find news by date
-    public List<News> findNewsByDate(Date date) {
-        try {
-            logger.info("Finding news by date");
-            Query query = new Query();
-            query.addCriteria(Criteria.where("publishDate").is(date));
-            return mongoTemplate.find(query, News.class);
-        } catch (DataAccessException e) {
-            logger.error("Error occurred while finding news by date: {}", e.getMessage());
-            return Collections.emptyList();
-        }
-    }
-    
-    
-    // Get all news
-	public List<News> findAllNews() {
-		try {
-            logger.info("Listing all news items");
-            return mongoTemplate.findAll(News.class);
-        } catch (DataAccessException e) {
-            logger.error("Error occurred while listing all news items: {}", e.getMessage());
-            return Collections.emptyList();
-        }
-	}
-    
 	@PreDestroy
 	public void destroy() {
 		logger.info("News DAO is destroyed.");
