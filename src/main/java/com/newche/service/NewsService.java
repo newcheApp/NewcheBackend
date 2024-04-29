@@ -12,7 +12,7 @@ import java.util.List;
 public class NewsService {
 
     private final NewsDAO newsDAO;
-
+    // test
     @Autowired
     public NewsService(NewsDAO newsDAO) {
         this.newsDAO = newsDAO;
