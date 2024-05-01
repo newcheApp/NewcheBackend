@@ -15,7 +15,7 @@ public class News {
 	private String id;
 	private String title;
 	private String url;
-	private Date publishDate;
+	private Date date;
 	private String body;
 	private String image_url;
 	private String summary;
@@ -30,12 +30,12 @@ public class News {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public News(String id, String title, String url, Date publishDate, String body, String image_url, String summary,
+	public News(String id, String title, String url, Date date, String body, String image_url, String summary,
 			List<Tag> tags) {
 		this.id = id;
 		this.title = title;
 		this.url = url;
-		this.publishDate = publishDate;
+		this.date = date;
 		this.body = body;
 		this.image_url = image_url;
 		this.summary = summary;
@@ -83,12 +83,12 @@ public class News {
 		logger.debug("Tags set to: {}", tags);
 	}
 
-	public Date getPublishDate() {
-		return publishDate;
+	public Date getDate() {
+		return date;
 	}
-	public void setPublishDate(Date publishDate) {
-		this.publishDate = publishDate;
-		logger.debug("Publishing Date set to: {}", publishDate);
+	public void setPDate(Date date) {
+		this.date = date;
+		logger.debug("Publishing Date set to: {}", date);
 	}
 
 	public String getBody() {
@@ -108,7 +108,7 @@ public class News {
 
 	@Override
 	public String toString() {
-		return "News [id=" + id + ", title=" + title + ", url=" + url + ", publishDate=" + publishDate + ", body="
+		return "News [id=" + id + ", title=" + title + ", url=" + url + ", publishDate=" + date + ", body="
 				+ body + ", image_url=" + image_url + ", summary=" + summary + ", tags=" + tags + "]";
 	}
 

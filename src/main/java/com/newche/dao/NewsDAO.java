@@ -14,10 +14,13 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class NewsDAO {
@@ -116,12 +119,12 @@ public class NewsDAO {
     }
 }
 
-    // Find news by tags and date
+    // Find news by tags and date - using intersection of results
+// Find news by tags and date with enhanced logging
     public List<News> findNewsByTagsAndDate(List<String> tagIds, Date date) {
         try {
             logger.info("Finding news by tags: {} and date: {}", tagIds, date);
 
-            // Set up the date range to cover the entire day
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -129,28 +132,24 @@ public class NewsDAO {
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
 
-            Date startDate = calendar.getTime(); // start of the day
-            calendar.add(Calendar.DATE, 1);
-            Date endDate = calendar.getTime(); // start of the next day
+            Date startDate = calendar.getTime(); // Start of the day
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            Date endDate = calendar.getTime(); // Start of the next day
 
-            logger.info("Querying for news items from {} to {}", startDate, endDate);
-
-            // Build the query to filter by tags and the date range
             Query query = new Query();
-            query.addCriteria(Criteria.where("tags").in(tagIds)
-                                      .andOperator(
-                                          Criteria.where("publishDate").gte(startDate).lt(endDate)
-                                      ));
+            query.addCriteria(Criteria.where("date").gte(startDate).lt(endDate)
+                            .andOperator(Criteria.where("tags").in(tagIds)));
 
+            logger.debug("Constructed query: {}", query.toString());
             List<News> results = mongoTemplate.find(query, News.class);
-            logger.info("Query returned {} news items", results.size());
+            logger.info("Query returned {} results.", results.size());
 
             return results;
         } catch (DataAccessException e) {
-            logger.error("Error occurred while finding news by tags and date: {}", e.getMessage());
+            logger.error("Error occurred while finding news by tags and date: {}", e.getMessage(), e);
             return Collections.emptyList();
         }
-    }
+}
 
 	@PreDestroy
 	public void destroy() {

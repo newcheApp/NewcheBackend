@@ -67,18 +67,13 @@ public class NewsController {
 
     @GetMapping("/by-tags-date")
     public ResponseEntity<List<News>> getNewsByTagsAndDate(
-        @RequestParam List<String> tags,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
-        List<News> newsItems = newsService.getNewsByTagsAndDate(tags, date);
-        if (newsItems.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(newsItems);
-    }
-
-    public ResponseEntity<List<News>> getAllTags() {
-        List<News> newsList = newsService.getAllNews();
-        return ResponseEntity.ok(newsList);
+        @RequestParam("tags") List<String> tagIds,  // Accept multiple tags as a list
+        @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+    
+        log.info("Controller: Received request for news by tags: {} and date: {}", tagIds, date);
+        List<News> results = newsService.getNewsByTagsAndDate(tagIds, date);
+        log.info("Controller: Returning {} results.", results.size());
+        return ResponseEntity.ok(results);
     }
 
     // Delete a news item
@@ -88,6 +83,5 @@ public class NewsController {
         return ResponseEntity.ok().build();
     }
 
-    // Additional news-related endpoints...
 
 }
