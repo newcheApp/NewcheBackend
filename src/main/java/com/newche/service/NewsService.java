@@ -29,6 +29,10 @@ public class NewsService {
         return newsDAO.findNewsById(id);
     }
 
+    public List<News> getNewsReverseOrder() {
+        return newsDAO.findAllReverseOrder();
+    }
+
     // Retrieve news by tags
     public List<News> getNewsByTags(List<String> tagIds) {
         return newsDAO.findNewsByTags(tagIds);

@@ -14,6 +14,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Query;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -65,6 +68,23 @@ public class NewsDAO {
             return Collections.emptyList();
         }
 	}
+
+    // Get all with reverse order
+    public List<News> findAllReverseOrder() {
+        try{
+            logger.info("Listing all news items in reverse");
+            // Create a query object
+            Query query = new Query();
+            // Sort by createdAt field in descending order
+            query.with(Sort.by(Sort.Direction.DESC, "createdAt"));
+            // Execute the query to get all news in reverse order
+            return mongoTemplate.find(query, News.class);
+
+        }catch(DataAccessException e) {
+            logger.error("Error occured while listing all news in reverse order: {}", e.getMessage());
+            return Collections.emptyList();
+        }
+    }
 
     // Find news by ID
     public News findNewsById(String id) {

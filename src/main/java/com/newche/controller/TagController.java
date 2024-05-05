@@ -56,7 +56,12 @@ public class TagController {
         return ResponseEntity.ok().build();
     }
 
-    // Additional tag-related endpoints...
+    @GetMapping("/level")
+    public ResponseEntity<List<Tag>> getTagsByLevel(@RequestParam int level) {
+        List<Tag> leveledTags = tagService.getTagsByLevel(level);
+        return ResponseEntity.ok(leveledTags);
+    }
+    
 
 }
 

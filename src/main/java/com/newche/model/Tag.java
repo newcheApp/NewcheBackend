@@ -14,6 +14,7 @@ public class Tag {
     @Indexed(unique = true)
     private String name;
     private String displayName;
+    private int level;
 
     private static final Logger logger = LoggerFactory.getLogger(News.class);
 
@@ -52,11 +53,20 @@ public class Tag {
         this.displayName = displayName;
         logger.debug("Tag displayName set to: {}", displayName);
     }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        return "Tag [id=" + id + ", name=" + name + ", displayName=" + displayName + ", level=" + level + "]";
+    }
     
-	@Override
-	public String toString() {
-		return "Tag [id= " + id + ", name= " + name + ", display Name= " + displayName + "]";
-	}
     
 }
 

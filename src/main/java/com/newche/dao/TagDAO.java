@@ -48,6 +48,16 @@ public class TagDAO {
         }
     }
     
+    public List<Tag> findTagsByLevel(int level){
+        try {
+            logger.info("Finding Tag by level: {}", level);
+            Query query = new Query(Criteria.where("level").is(level));
+            return mongoTemplate.find(query, Tag.class);
+        } catch (DataAccessException e) {
+            logger.error("Error occurred while finding Tag by ID: {}", e.getMessage());
+            return null;
+        }
+    }
     
     
     public Tag findTagByName(String name){

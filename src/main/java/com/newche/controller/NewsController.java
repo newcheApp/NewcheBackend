@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/news") // Base path for all news-related endpoints
@@ -55,6 +58,14 @@ public class NewsController {
         List<News> newsList = newsService.getAllNews();
         return ResponseEntity.ok(newsList);
     }
+
+    // Get all news by reverse order
+    @GetMapping("/reverse")
+    public ResponseEntity<List<News>> getAllNewsReverse() {
+        List<News> reverseList = newsService.getNewsReverseOrder();
+        return ResponseEntity.ok(reverseList);
+    }
+    
     
     // Retrieve news by date@GetMapping("/by-date")
     @GetMapping("/by-date")

@@ -39,8 +39,11 @@ public class TagService {
 
     // Delete a tag
     public void deleteTag(String id) {
-        // Additional logic before deleting the tag (if necessary)
         tagDAO.deleteTag(id);
+    }
+
+    public List<Tag> getTagsByLevel(int level) {
+        return tagDAO.findTagsByLevel(level);
     }
 
 
