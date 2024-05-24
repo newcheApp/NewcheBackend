@@ -49,6 +49,19 @@ public class UserDAO {
         }
     }
 
+    // Find user by email
+    public User findUserByEmail(String email) {
+        try {
+            logger.info("Finding user by email: {}", email);
+            Query query = new Query(Criteria.where("email").is(email));
+            return mongoTemplate.findOne(query, User.class);
+        } catch (DataAccessException e) {
+            logger.error("Error occurred while finding user by email: {}", e.getMessage());
+            throw e; // or handle the exception as needed
+        }
+    }
+
+
     // List all users
     public List<User> findAllUsers() {
         try {
@@ -80,21 +93,22 @@ public class UserDAO {
     }
 
     // Update user information
-    public void updateUser(String id, User user) {
+    public User updateUser(String id, User user) {
         try {
             logger.info("Updating user with ID: {}", id);
             mongoTemplate.save(user);
         } catch (DataAccessException e) {
             logger.error("Error occurred while updating user: {}", e.getMessage());
         }
+        return user;
     }
 
     // Update user's tag list
-    public void updateUserTags(String userId, List<String> tagIds) {
+    public void updateUserTags(String userId, List<String> tags) {
         try {
             logger.info("Updating tags for user with ID: {}", userId);
             Query query = new Query(Criteria.where("id").is(userId));
-            Update update = new Update().set("tagIds", tagIds);
+            Update update = new Update().set("tags", tags);
             mongoTemplate.updateFirst(query, update, User.class);
         } catch (DataAccessException e) {
             logger.error("Error occurred while updating user tags: {}", e.getMessage());
@@ -137,10 +151,10 @@ public class UserDAO {
     }
     
     // Find users with specific tags
-    public List<User> findUsersByTags(List<String> tagIds) {
+    public List<User> findUsersByTags(List<String> tags) {
         try {
             logger.info("Finding users by tags");
-            Query query = new Query(Criteria.where("tagIds").in(tagIds));
+            Query query = new Query(Criteria.where("tags").in(tags));
             return mongoTemplate.find(query, User.class);
         } catch (DataAccessException e) {
             logger.error("Error occurred while finding users by tags: {}", e.getMessage());

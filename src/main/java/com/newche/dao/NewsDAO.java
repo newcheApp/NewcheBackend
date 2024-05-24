@@ -1,10 +1,6 @@
 package com.newche.dao;
-
 import com.newche.model.News;
-import com.newche.model.Tag;
-
 import jakarta.annotation.PreDestroy;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +9,12 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.query.Query;
-
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @Repository
 public class NewsDAO {
@@ -76,7 +67,7 @@ public class NewsDAO {
             // Create a query object
             Query query = new Query();
             // Sort by createdAt field in descending order
-            query.with(Sort.by(Sort.Direction.DESC, "createdAt"));
+            query.with(Sort.by(Sort.Direction.DESC, "date"));
             // Execute the query to get all news in reverse order
             return mongoTemplate.find(query, News.class);
 
@@ -98,11 +89,12 @@ public class NewsDAO {
     }
 
     // Find news by tags
-    public List<News> findNewsByTags(List<String> tagIds) {
+     public List<News> findNewsByTags(List<String> tagIds) {
         try {
             logger.info("Finding news by tags");
             Query query = new Query();
-            query.addCriteria(Criteria.where("tags").in(tagIds));  // Adjusted to match an array of strings
+            query.addCriteria(Criteria.where("tags").in(tagIds));
+            query.with(Sort.by(Sort.Direction.DESC, "date")); // Assuming 'date' is the field name
             return mongoTemplate.find(query, News.class);
         } catch (DataAccessException e) {
             logger.error("Error occurred while finding news by tags: {}", e.getMessage());

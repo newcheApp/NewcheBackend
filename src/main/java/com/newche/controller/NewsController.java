@@ -39,6 +39,7 @@ public class NewsController {
     }
 
     // Retrieve a news item by ID
+    @CrossOrigin
     @GetMapping("/{id}")
     public ResponseEntity<News> getNewsById(@PathVariable String id) {
         News news = newsService.getNewsById(id);
@@ -46,6 +47,7 @@ public class NewsController {
     }
 
     // Retrieve news by tags
+    @CrossOrigin
     @GetMapping("/by-tags")
     public ResponseEntity<List<News>> getNewsByTags(@RequestParam List<String> tagIds) {
         List<News> newsList = newsService.getNewsByTags(tagIds);
@@ -53,6 +55,7 @@ public class NewsController {
     }    
 
     // Get all news items
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<News>> getAllNews() {
         List<News> newsList = newsService.getAllNews();
@@ -60,6 +63,7 @@ public class NewsController {
     }
 
     // Get all news by reverse order
+    @CrossOrigin
     @GetMapping("/reverse")
     public ResponseEntity<List<News>> getAllNewsReverse() {
         List<News> reverseList = newsService.getNewsReverseOrder();
@@ -68,6 +72,7 @@ public class NewsController {
     
     
     // Retrieve news by date@GetMapping("/by-date")
+    @CrossOrigin
     @GetMapping("/by-date")
     public ResponseEntity<List<News>> getNewsByDate(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         log.info("Received date: {}", date);
@@ -75,7 +80,9 @@ public class NewsController {
         log.info("Query returned {} results", newsList.size());
         return ResponseEntity.ok(newsList);
     }
-
+    
+    // Retrieve news by date and tags
+    @CrossOrigin
     @GetMapping("/by-tags-date")
     public ResponseEntity<List<News>> getNewsByTagsAndDate(
         @RequestParam("tags") List<String> tagIds,  // Accept multiple tags as a list
@@ -88,6 +95,7 @@ public class NewsController {
     }
 
     // Delete a news item
+    @CrossOrigin
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteNews(@PathVariable String id) {
         newsService.deleteNews(id);

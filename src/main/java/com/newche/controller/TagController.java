@@ -7,13 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -29,6 +22,7 @@ public class TagController {
     }
 
     // Create a new tag
+    @CrossOrigin
     @PostMapping
     public ResponseEntity<Tag> createTag(@RequestBody Tag tag) {
         Tag createdTag = tagService.createTag(tag);
@@ -36,6 +30,7 @@ public class TagController {
     }
 
     // Retrieve a tag by ID
+    @CrossOrigin
     @GetMapping("/{id}")
     public ResponseEntity<Tag> getTagById(@PathVariable String id) {
         Tag tag = tagService.getTagById(id);
@@ -43,6 +38,7 @@ public class TagController {
     }
 
     // Retrieve all tags
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<Tag>> getAllTags() {
         List<Tag> tags = tagService.getAllTags();
@@ -50,6 +46,7 @@ public class TagController {
     }
 
     // Delete a tag
+    @CrossOrigin
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTag(@PathVariable String id) {
         tagService.deleteTag(id);
@@ -57,6 +54,7 @@ public class TagController {
     }
 
     @GetMapping("/level")
+    @CrossOrigin
     public ResponseEntity<List<Tag>> getTagsByLevel(@RequestParam int level) {
         List<Tag> leveledTags = tagService.getTagsByLevel(level);
         return ResponseEntity.ok(leveledTags);

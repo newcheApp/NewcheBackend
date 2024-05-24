@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import com.newche.model.Tag;
+
 
 @Document
 public class User {
@@ -24,7 +24,7 @@ public class User {
 	private String surname;
 	private String role;  	  // role of the user admin etc.
     @DBRef
-    private List<Tag> tagIds;
+    private List<Tag> tags;
 	
 	private static final Logger logger = LoggerFactory.getLogger(News.class);
 	
@@ -32,7 +32,7 @@ public class User {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public User(String email, String userName, String password, String name, String surname, String role, List<Tag> tagIds) {
+	public User(String email, String userName, String password, String name, String surname, String role, List<Tag> tags) {
 		super();
 		this.email = email;
 		this.userName = userName;
@@ -40,7 +40,7 @@ public class User {
 		this.name = name;
 		this.surname = surname;
 		this.role = role;
-		this.tagIds = tagIds;
+		this.tags = tags;
 	}
 
 
@@ -85,11 +85,11 @@ public class User {
 	}
 	
 	
-	public List<Tag> getTagIds() {
-		return tagIds;
+	public List<Tag> getTags() {
+		return tags;
 	}
-	public void setTagIds(List<Tag> tags) {
-		this.tagIds = tags;
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
 	}
 
 	
@@ -111,9 +111,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", email=" + email + ", userName=" + userName + ", password=" + password + ", name="
-				+ name + ", surname=" + surname + ", role=" + role + ", tagIds=" + tagIds + "]";
+				+ name + ", surname=" + surname + ", role=" + role + ", tags=" + tags + "]";
 	}
 	
 }
-
-
