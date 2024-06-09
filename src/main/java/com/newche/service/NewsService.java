@@ -33,6 +33,11 @@ public class NewsService {
         return newsDAO.findAllReverseOrder();
     }
 
+    public List<News> getNewsInRange(int rangeEnd) {
+        int start = Math.max(0, rangeEnd - 100);
+        return newsDAO.findNewsInRange(start, 100);
+    }
+
     // Retrieve news by tags
     public List<News> getNewsByTags(List<String> tagIds) {
         return newsDAO.findNewsByTags(tagIds);

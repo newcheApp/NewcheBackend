@@ -77,6 +77,24 @@ public class NewsDAO {
         }
     }
 
+    // Get a specific number of news items in reverse order
+    public List<News> findNewsInRange(int start, int count) {
+        try {
+            logger.info("Listing news items from {} to {} in reverse", start, start + count);
+            // Create a query object
+            Query query = new Query();
+            // Sort by createdAt field in descending order
+            query.with(Sort.by(Sort.Direction.DESC, "date"));
+            // Skip the first 'start' items and limit the result to 'count' items
+            query.skip(start).limit(count);
+            // Execute the query to get the specified range of news in reverse order
+            return mongoTemplate.find(query, News.class);
+        } catch (DataAccessException e) {
+            logger.error("Error occurred while listing news items in range {} to {}: {}", start, start + count, e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
     // Find news by ID
     public News findNewsById(String id) {
         try {

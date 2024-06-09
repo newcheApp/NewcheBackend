@@ -1,21 +1,14 @@
 package com.newche.controller;
-
 import com.newche.model.News;
-import com.newche.model.Tag;
 import com.newche.service.NewsService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Date;
 import java.util.List;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -102,5 +95,10 @@ public class NewsController {
         return ResponseEntity.ok().build();
     }
 
+    @CrossOrigin
+    @GetMapping("/in-range")
+    public List<News> getNewsInRange(@RequestParam int rangeEnd) {
+        return newsService.getNewsInRange(rangeEnd);
+    }
 
 }
