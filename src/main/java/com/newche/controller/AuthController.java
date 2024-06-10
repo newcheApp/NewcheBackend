@@ -1,5 +1,4 @@
 package com.newche.controller;
-
 import com.newche.model.UserCredentials;
 import com.newche.service.UserService;
 import org.slf4j.Logger;
@@ -9,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth") // Base path specific for authentication tasks
+@RequestMapping("/auth")
 public class AuthController {
 
     private final UserService userService;
@@ -20,9 +19,7 @@ public class AuthController {
         this.userService = userService;
     }
 
-    
-    // Endpoint for validating user credentials
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:5173") // Allow requests from your frontend URL
     @PostMapping("/validate-credentials")
     public ResponseEntity<Boolean> validateCredentials(@RequestBody UserCredentials credentials) {
         logger.info("Validation service called for identifier: {}", credentials.getIdentifier());
